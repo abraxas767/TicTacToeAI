@@ -1,7 +1,6 @@
 """
 Tic Tac Toe Player
 """
-import sys
 import math
 import copy
 
@@ -25,7 +24,6 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    if board == initial_state(): return X
     return O if sum(board, []).count(X) > sum(board,[]).count(O) else X
 
 
@@ -40,9 +38,7 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if action not in actions(board):
-        #print(board, actions(board))
-        raise InvalidActionException
+    if action not in actions(board): raise InvalidActionException
     nBoard = copy.deepcopy(board)
     nBoard[action[0]][action[1]] = player(board)
     return nBoard
@@ -70,7 +66,6 @@ def winner(board):
     if b[0][0]+b[1][1]+b[2][2] == 'OOO': return O
     if b[0][2]+b[1][1]+b[2][0] == 'XXX': return X
     if b[0][2]+b[1][1]+b[2][0] == 'OOO': return O
-
     return None
 
 
