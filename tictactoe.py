@@ -93,21 +93,18 @@ def utility(board):
     return 0
 
 
-
-# returns (action, evaluation)
-def _minimax(board, parent_action, maximizingPlayer=True):
+def __minimax(board, parent_action, maximizingPlayer=True):
 
     if terminal(board): return parent_action, utility(board)
 
-    # generate next nodes
     _boards = [{'board': result(board, ac), 'parent_action': ac} for ac in actions(board)]
 
     if maximizingPlayer:
         maxEvaluation = float('-inf')
-        maximizingAction = list(actions(board))[0]
+        maximizingAction = None
         for b in _boards:
-            (optimal_action, evaluation) = _minimax(b.get('board'), b.get('parent_action'), False)
-            if evaluation >= maxEvaluation:
+            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), False)
+            if evaluation > maxEvaluation:
                 maxEvaluation = evaluation
                 maximizingAction = optimal_action
 
@@ -115,26 +112,17 @@ def _minimax(board, parent_action, maximizingPlayer=True):
 
     else:
         minEvaluation = float('inf')
-        minimizingAction = list(actions(board))[0]
+        minimizingAction = None
         for b in _boards:
-            (optimal_action, evaluation) = _minimax(b.get('board'), b.get('parent_action'), True)
+            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), True)
             if evaluation < minEvaluation:
                 minEvaluation = evaluation
-                minizingAction = optimal_action
+                minimizingAction = optimal_action
 
         return minimizingAction, minEvaluation
 
-
-
-def minimax(board, act=None):
+def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-
-    if terminal(board): return None
-
-
-    # action, eval = _minimax(board, None, False if player(board) == X else True)
-    action, eval = _minimax(board, None, True)
-    print("res: ", action, eval)
-    return action
+    return None if terminal(board) else (__minimax(board, None, False if player(board) == X else True))[0]
