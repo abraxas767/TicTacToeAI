@@ -68,7 +68,6 @@ def winner(board):
     if b[0][2]+b[1][1]+b[2][0] == 'OOO': return O
     return None
 
-
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
@@ -88,7 +87,7 @@ def utility(board):
     return 0
 
 
-def __minimax(board, parent_action, maximizingPlayer=True):
+def __minimax(board, parent_action, maximizingPlayer=True, pruning=True, alpha=float('-inf'), beta=float('inf')):
 
     if terminal(board): return parent_action, utility(board)
 
@@ -98,26 +97,28 @@ def __minimax(board, parent_action, maximizingPlayer=True):
         maxEvaluation = float('-inf')
         maximizingAction = None
         for b in _boards:
-            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), False)
+            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), False, pruning, alpha, beta)
             if evaluation > maxEvaluation:
                 maxEvaluation = evaluation
                 maximizingAction = optimal_action
-
+                alpha = evaluation
+                if beta < alpha and pruning: break
         return maximizingAction, maxEvaluation
 
     else:
         minEvaluation = float('inf')
         minimizingAction = None
         for b in _boards:
-            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), True)
+            (optimal_action, evaluation) = __minimax(b.get('board'), b.get('parent_action'), True, pruning, alpha, beta)
             if evaluation < minEvaluation:
                 minEvaluation = evaluation
                 minimizingAction = optimal_action
-
+                beta = evaluation
+                if beta < alpha and pruning: break
         return minimizingAction, minEvaluation
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    return None if terminal(board) else (__minimax(board, None, False if player(board) == X else True))[0]
+    return None if terminal(board) else (__minimax(board, None, False if player(board) == X else True, pruning=False))[0]
