@@ -121,4 +121,4 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    return None if terminal(board) else (__minimax(board, None, False if player(board) == X else True, pruning=False))[0]
+    return None if terminal(board) else (__minimax(board, None, False if player(board) == X else True, pruning=True))[0]
