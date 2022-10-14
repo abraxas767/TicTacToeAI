@@ -51,7 +51,7 @@ def winner(board):
     # None to string
     b = [[str(val) for val in row] for row in board]
     # check horizontally
-    for key, row in enumerate(board):
+    for row in board:
         if all(el == X for el in row): return X
         if all(el == O for el in row): return O
     # check vertically
